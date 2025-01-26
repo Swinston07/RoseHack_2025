@@ -41,7 +41,6 @@ body {
   margin-bottom: 15px;
   line-height: 1.5;
 
-  /* Hide empty messages */
   &:empty {
     display: none;
   }
@@ -78,12 +77,6 @@ body {
   padding: 0 20px;
   margin: 0 auto;
 
-  .search-icon {
-    font-size: 24px;
-    color: #432818;
-    margin-right: 10px;
-  }
-
   .search-bar {
     width: 100%;
     border: none;
@@ -97,5 +90,21 @@ body {
       color: #432818;
       opacity: 0.7;
     }
+  }
+}
+
+.submit-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #FFACC7;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #FF8DC7;
   }
 }

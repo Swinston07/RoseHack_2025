@@ -23,12 +23,35 @@
     </div>
 
     <!-- Input Form -->
-    <form action="{{ url_for('home') }}" method="POST" class="chat-input">
+    <form action="{{ url_for('home') }}" method="POST" class="chat-input" id="chat-form">
       <div class="search-bar-wrapper">
         <input type="text" name="user_input" placeholder="Type your query here..." class="search-bar" required>
       </div>
-      <button type="submit" hidden></button>
+      <div class="coordinate-inputs">
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+      </div>
+      <button type="submit" class="submit-button">Send</button>
     </form>
   </div>
+
+  <script>
+    // Automatically fetch the user's location
+    document.addEventListener("DOMContentLoaded", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+          },
+          (error) => {
+            console.error("Geolocation error:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    });
+  </script>
 </body>
 </html>
