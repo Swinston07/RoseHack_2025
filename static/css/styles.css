@@ -84,6 +84,7 @@ body {
   overflow-y: auto;
   border-radius: 15px;
   padding: 15px;
+  background-color: rgba(255, 192, 203, 0.8); /* 80% opaque pink */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   font-size: 18px; /* Increased font size for queries */
@@ -124,20 +125,16 @@ body {
 
 .message.user p {
   text-align: left;
-  background-color: #d1e7dd;
   padding: 10px;
   border-radius: 10px;
-  color: #0f5132;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #432818;
 }
 
 .message.assistant p {
   text-align: left;
-  background-color: #f8d7da;
   padding: 10px;
   border-radius: 10px;
-  color: #842029;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #432818;
 }
 
 /* Input Form */
