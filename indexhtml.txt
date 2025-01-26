@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Planner</title>
+    
+    <!-- Reference to the CSS file using url_for -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* Top navigation */
+        .navbar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .navbar .auth-buttons button {
+            margin-left: 10px;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        /* Central search bar */
+        .search-container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .search-container input {
+            width: 400px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-container input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Prompt tiles/cards */
+.prompt-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px auto;
+    width: 80%;
+    max-width: 800px;
+}
+
+.prompt-card {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.prompt-card h3 {
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #007BFF;
+}
+
+.prompt-card p {
+    font-size: 14px;
+    color: #555555;
+    margin: 0;
+}
+
+.prompt-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+}
+
+.prompt-card i {
+    display: block;
+    margin: 0 auto 10px;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.prompt-card:hover i {
+    transform: scale(1.1);
+    color: #0056b3;
+}
+
+        .intro-line {
+    font-size: 18px;
+    color: #555555;
+    margin-bottom: 20px;
+    text-align: center;
+    font-style: italic;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+    
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="navbar">
+        <div class="logo">AI Planner</div>
+        <div class="auth-buttons">
+            <button>Login</button>
+            <button>Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Central Search Bar -->
+<div class="search-container">
+    <div class="intro-line" id="intro-line">
+        Your well-being matters. Let’s plan your day, your way.
+    </div>
+    <input type="text" id="search-bar" placeholder="Search for parks, health services, or itinerary...">
+</div>
+
+
+    <!-- Prompt Tiles -->
+<div class="prompt-cards">
+    <div class="prompt-card">
+        <i class="fas fa-calendar-alt fa-2x" style="color: #007BFF; margin-bottom: 10px;"></i>
+        <h3>Plan a Day</h3>
+        <p>Get a personalized itinerary for your day.</p>
+    </div>
+    <div class="prompt-card">
+        <i class="fas fa-tree fa-2x" style="color: #28a745; margin-bottom: 10px;"></i>
+        <h3>Find a Park</h3>
+        <p>Discover peaceful spots near you.</p>
+    </div>
+    <div class="prompt-card">
+        <i class="fas fa-heartbeat fa-2x" style="color: #dc3545; margin-bottom: 10px;"></i>
+        <h3>Health Resources</h3>
+        <p>Access helpful articles and tips for well-being.</p>
+    </div>
+    <div class="prompt-card">
+        <i class="fas fa-route fa-2x" style="color: #17a2b8; margin-bottom: 10px;"></i>
+        <h3>Itinerary Planning</h3>
+        <p>Sync events with your calendar seamlessly.</p>
+    </div>
+</div>
+
+<!-- Reference to the JavaScript file using url_for -->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+<script>
+    // Lines to display
+    const lines = [
+        "Empowering your daily journey—explore, plan, and thrive.",
+        "Your well-being matters. Let’s plan your day, your way.",
+        "From health to happiness, discover what you need today.",
+        "Find peace, purpose, and possibilities—one search at a time.",
+        "Here to guide your steps toward a healthier, happier you.",
+        "Plan your path, prioritize yourself, and make every moment count.",
+        "Supporting you every step of the way—start planning now.",
+        "Your guide to a balanced, fulfilling day is just a search away.",
+        "Celebrate you. Plan your day with ease and care.",
+        "Take charge of your well-being—let’s plan your perfect day."
+    ];
+
+    let currentIndex = 0;
+
+    // Function to update the intro line with fade effect
+    function updateIntroLine() {
+        const introLineElement = document.getElementById("intro-line");
+
+        // Add fade-out class
+        introLineElement.classList.remove("fade-in");
+        introLineElement.classList.add("fade-out");
+
+        // Wait for the fade-out animation to finish before updating the text
+        setTimeout(() => {
+            introLineElement.textContent = lines[currentIndex];
+            currentIndex = (currentIndex + 1) % lines.length;
+
+            // Add fade-in class after updating the text
+            introLineElement.classList.remove("fade-out");
+            introLineElement.classList.add("fade-in");
+        }, 1000); // Match the fade-out duration in milliseconds
+    }
+
+    // Change the line every 5 seconds
+    setInterval(updateIntroLine, 5000);
+</script>
+
+</body>
+</html>
+
