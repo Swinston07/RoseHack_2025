@@ -36,7 +36,7 @@ def ask_gpt():
             )
 
             gpt_response = response['choices'][0]['message']['content']
-            return render_template('response.html', user_input="hello", gpt_response=gpt_response)
+            return render_template('response.html', user_input=user_input, gpt_response=gpt_response)
 
         except Exception as e:
             flash(f"An error occurred: {e}", "error")
