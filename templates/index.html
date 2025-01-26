@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask GPT</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mother's Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to Flask GPT</h1>
-    <p>Click below to interact with GPT!</p>
-    <a href="{{ url_for('ask_gpt') }}">Ask GPT</a>
+  <div class="container">
+    <h1 class="helper-text">How may I assist you?</h1>
+
+    <!-- Chat History -->
+    <div class="chat-history">
+      {% for message in conversation %}
+        <div class="message {{ message.role }}">
+          <p><strong>{{ 'You' if message.role == 'user' else 'Assistant' }}:</strong></p>
+          <!-- Render assistant's response as raw HTML -->
+          <div>{{ message.content | safe }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Input Form -->
+    <form action="{{ url_for('home') }}" method="POST" class="chat-input">
+      <div class="search-bar-wrapper">
+        <input type="text" name="user_input" placeholder="Type your query here..." class="search-bar" required>
+      </div>
+      <button type="submit" hidden></button>
+    </form>
+  </div>
 </body>
 </html>
