@@ -5,8 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mother's Assistant</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
+  <script>
+    let userLatitude = null;
+    let userLongitude = null;
+
+    // Automatically fetch the user's location
+    document.addEventListener("DOMContentLoaded", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLatitude = position.coords.latitude;
+            userLongitude = position.coords.longitude;
+            console.log("Location fetched:", userLatitude, userLongitude);
+          },
+          (error) => {
+            console.error("Geolocation error:", error.message);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    });
+
+    function sendButtonQuery(query) {
+      const inputField = document.querySelector(".search-bar");
+      const latitudeField = document.getElementById("latitude");
+      const longitudeField = document.getElementById("longitude");
+
+      inputField.value = query;
+      latitudeField.value = userLatitude;
+      longitudeField.value = userLongitude;
+
+      document.querySelector(".chat-input").submit();
+    }
+  </script>
 </head>
 <body>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='assets/herLogo.png') }}" alt="Mother's Assistant Logo">
+    </div>
+    <div class="auth-buttons">
+      <button class="auth-button">Login</button>
+      <button class="auth-button">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
   <div class="container">
     <h1 class="helper-text">How may I assist you?</h1>
 
@@ -22,36 +70,32 @@
       {% endfor %}
     </div>
 
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button onclick="sendButtonQuery('Plan a day of peace that I can have for myself')" class="action-button">
+        <i class="fas fa-calendar-alt"></i> Plan a Day
+      </button>
+      <button onclick="sendButtonQuery('Find a Park')" class="action-button">
+        <i class="fas fa-tree"></i> Find a Park
+      </button>
+      <button onclick="sendButtonQuery('Locate mental health resources')" class="action-button">
+        <i class="fas fa-heartbeat"></i> Health Resources
+      </button>
+      <button onclick="sendButtonQuery('Plan 5 days of fun and eating')" class="action-button">
+        <i class="fas fa-route"></i> Itinerary Planning
+      </button>
+    </div>
+
     <!-- Input Form -->
-    <form action="{{ url_for('home') }}" method="POST" class="chat-input" id="chat-form">
+    <form action="{{ url_for('home') }}" method="POST" class="chat-input">
       <div class="search-bar-wrapper">
-        <input type="text" name="user_input" placeholder="Type your query here..." class="search-bar" required>
+        <input type="text" name="user_input" placeholder="Type your query here..." class="search-bar">
       </div>
-      <div class="coordinate-inputs">
-        <input type="hidden" name="latitude" id="latitude">
-        <input type="hidden" name="longitude" id="longitude">
-      </div>
+      <!-- Hidden Inputs for Latitude and Longitude -->
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
       <button type="submit" class="submit-button">Send</button>
     </form>
   </div>
-
-  <script>
-    // Automatically fetch the user's location
-    document.addEventListener("DOMContentLoaded", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            document.getElementById("latitude").value = position.coords.latitude;
-            document.getElementById("longitude").value = position.coords.longitude;
-          },
-          (error) => {
-            console.error("Geolocation error:", error);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-    });
-  </script>
 </body>
 </html>
