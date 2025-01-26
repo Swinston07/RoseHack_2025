@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask GPT</title>
+</head>
+<body>
+    <h1>Ask GPT</h1>
+    <form method="post">
+        <textarea name="user_input" rows="5" cols="40" placeholder="Enter your question"></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
