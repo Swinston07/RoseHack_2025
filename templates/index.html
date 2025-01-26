@@ -13,11 +13,12 @@
     <!-- Chat History -->
     <div class="chat-history">
       {% for message in conversation %}
-        <div class="message {{ message.role }}">
-          <p><strong>{{ 'You' if message.role == 'user' else 'Assistant' }}:</strong></p>
-          <!-- Render assistant's response as raw HTML -->
-          <div>{{ message.content | safe }}</div>
-        </div>
+        {% if message.role != 'system' %}
+          <div class="message {{ message.role }}">
+            <p><strong>{{ 'You' if message.role == 'user' else 'Assistant' }}:</strong></p>
+            <div>{{ message.content | safe }}</div>
+          </div>
+        {% endif %}
       {% endfor %}
     </div>
 

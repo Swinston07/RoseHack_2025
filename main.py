@@ -56,7 +56,11 @@ def home():
         except Exception as e:
             flash(f"An unexpected error occurred: {e}", "error")
 
-    return render_template('index.html', conversation=conversation)
+    display_conversation = [
+        message for message in conversation if message["role"] != "system"
+    ]
+
+    return render_template('index.html', conversation=display_conversation)
 
 @app.route('/clear')
 def clear_conversation():

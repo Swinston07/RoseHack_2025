@@ -40,6 +40,11 @@ body {
 .message {
   margin-bottom: 15px;
   line-height: 1.5;
+
+  /* Hide empty messages */
+  &:empty {
+    display: none;
+  }
 }
 
 .message.user p {
