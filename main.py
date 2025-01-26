@@ -54,22 +54,33 @@ def home():
         try:
             conversation.append({"role": "user", "content": user_input})
 
-            # GPT-3.5 Turbo interaction
+            # GPT-4 interaction
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=conversation
+                model="gpt-4", messages=conversation
             )
-            model_response = response["choices"][0]["message"]["content"]
+
+            if "choices" in response and len(response["choices"]) > 0:
+                model_response = response["choices"][0]["message"]["content"]
+            else:
+                model_response = "I'm sorry, I couldn't process your request."
 
             # Determine location category for user queries
             location_category = None
             if user_lat and user_lon:
+                try:
+                    lat = float(user_lat)
+                    lon = float(user_lon)
+                except ValueError:
+                    flash("Invalid coordinates provided.", "error")
+                    return redirect(url_for("home"))
+
                 intent_query = f"""
                 Based on the user's input: '{user_input}', identify if it requires location-based suggestions 
-                (e.g., restaurants, parks, cafes). If it does, return the most relevant one-word category. 
+                (e.g., restaurants, parks, cafes) with 30 miles of the user. If it does, return the most relevant one-word category. 
                 Otherwise, return 'none'.
                 """
                 intent_response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4",
                     messages=[
                         {
                             "role": "system",
@@ -84,21 +95,15 @@ def home():
 
             # Fetch nearby places using HERE API if category and coordinates are available
             if user_lat and user_lon and location_category != "none":
-                try:
-                    lat = float(user_lat)
-                    lon = float(user_lon)
-                    here_results = fetch_nearby_places(lat, lon, location_category)
-
-                    if here_results and "items" in here_results:
-                        model_response += f"\n\nHere are some nearby {location_category}:\n"
-                        for item in here_results["items"]:
-                            model_response += f"- {item['title']} ({item['address']['label']})\n"
-                    else:
-                        model_response += (
-                            f"\n\nSorry, I couldn't find any nearby {location_category}."
-                        )
-                except ValueError:
-                    flash("Invalid coordinates provided", "error")
+                here_results = fetch_nearby_places(lat, lon, location_category)
+                if here_results and "items" in here_results:
+                    model_response += f"\n\nHere are some nearby {location_category}:\n"
+                    for item in here_results["items"]:
+                        model_response += f"- {item['title']} ({item['address']['label']})\n"
+                else:
+                    model_response += (
+                        f"\n\nSorry, I couldn't find any nearby {location_category}."
+                    )
 
             # Convert response to Markdown
             conversation.append(
@@ -106,6 +111,12 @@ def home():
             )
             session["conversation"] = conversation
 
+        except openai.error.AuthenticationError:
+            flash("Authentication error with OpenAI API. Please check your API key.", "error")
+        except openai.error.RateLimitError:
+            flash("Rate limit exceeded. Please try again later.", "error")
+        except openai.error.APIConnectionError:
+            flash("Network error with OpenAI API. Check your connection.", "error")
         except openai.error.OpenAIError as e:
             flash(f"OpenAI API error: {e}", "error")
 
